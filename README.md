@@ -1,67 +1,103 @@
-# Expense vs Income Classification — Final Term Project
+# Expense Income Classification
 
 ## Overview
-Predicts whether a personal-finance transaction is an **Income** or an **Expense** from its
-note/description, amount, payment mode, and date — motivated by automating the manual
-Income/Expense tagging step in an expense-tracker app (this team's mid-term project).
 
-## Project Type
-Classification (binary): `Income` (1) vs `Expense` (0).
+This project uses machine learning to classify household transactions as either **Income** or
+**Expense**. The model uses transaction notes, amounts, and payment modes to make predictions.
 
-## Data
-- **Source:** [Daily Transactions Dataset](https://www.kaggle.com/datasets/prasad22/daily-transactions-dataset)
-  by Prasad Patil, Kaggle (v4).
-- **File used:** `Daily Household Transactions.csv` (included in this submission).
-- **Size:** 2,461 rows, 8 columns (before cleaning).
-- **Note on provenance:** the dataset description states these are *dummy transactions made by
-  an individual* — i.e. synthetic-style data, not raw anonymized bank records. This is an
-  acknowledged limitation (see notebook Section 10).
+## File Structure
 
-## Repository Structure
-```
+```text
 .
-├── Daily Household Transactions.csv   # raw dataset
-├── expense_income_classification.ipynb # full pipeline (run top-to-bottom)
+├── expense_income_classification.ipynb
+├── Daily Household Transactions.csv
 ├── requirements.txt
+├── report.md
 └── README.md
 ```
 
-## How to Run
-1. Create an environment and install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-2. Launch Jupyter and run `expense_income_classification.ipynb` top-to-bottom:
-   ```bash
-   jupyter notebook expense_income_classification.ipynb
-   ```
-   All cells execute in order with no manual steps in between; the CSV file must be in the same
-   directory as the notebook.
+- `expense_income_classification.ipynb` - analysis and machine learning notebook.
+- `Daily Household Transactions.csv` - dataset used by the notebook.
+- `requirements.txt` - required Python packages.
+- `expense_income_classification_report.md` - project report.
 
-## Pipeline Summary
-1. **Data audit** — missing values, duplicates, class balance check.
-2. **Scope decision** — `Transfer-Out` records dropped (conceptually neither income nor expense).
-3. **Leakage check** — `Category`/`Subcategory` dropped because they were assigned using the same
-   information as the target; `Currency` dropped (constant column).
-4. **Stratified train/test split (80/20)** — done before any preprocessing.
-5. **EDA** — on training data only.
-6. **Preprocessing** — missing-note imputation, log-transform on `Amount`, one-hot encoding of
-   `Mode`, TF-IDF on `Note` — all fit on training data only, then applied to the test set.
-7. **Baseline** — majority-class `DummyClassifier`.
-8. **Models compared** — Logistic Regression vs Random Forest (both `class_weight='balanced'`),
-   5-fold stratified cross-validation, then `GridSearchCV` tuning of Random Forest on CV only.
-9. **Final evaluation** — tuned Random Forest evaluated once on the untouched test set.
-10. **Error analysis** — false positive/negative inspection, feature importances, discussion of
-    limitations.
+## Requirements
 
-## Key Results (Test Set)
-| Model | Accuracy | F1 (Income class) |
-|---|---|---|
-| Baseline (majority class) | 94.6% | 0.00 |
+- Python 3.10 or newer
+- Jupyter Notebook or VS Code with the Jupyter extension
+- pip
+
+## Environment Setup
+
+Open a terminal in the project folder and create a virtual environment:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+On Windows PowerShell, activate the environment with:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+After activation, install the packages using:
+
+```powershell
+python -m pip install -r requirements.txt
+```
+
+## Data Placement
+
+Keep `Daily Household Transactions.csv` in the project root, in the same folder as
+`expense_income_classification.ipynb`. The notebook loads the dataset from this location.
+
+The dataset is the [Daily Transactions Dataset](https://www.kaggle.com/datasets/prasad22/daily-transactions-dataset)
+from Kaggle. If the CSV is missing or stored in another folder, the notebook cannot load the data.
+
+## Run the Project
+
+With the virtual environment activated, start Jupyter Notebook:
+
+```bash
+jupyter notebook
+```
+
+Then open `expense_income_classification.ipynb` and run the cells from top to bottom.
+
+You can also open the project folder in VS Code, select the `.venv` Python interpreter, open the
+notebook, and run all cells. Make sure the notebook kernel uses the environment where the
+requirements were installed.
+
+To stop the virtual environment after finishing, run:
+
+```bash
+deactivate
+```
+
+## Expected Output
+
+After all cells run successfully, the notebook performs data cleaning, exploratory analysis,
+model training, and evaluation. It should produce charts, classification metrics, a confusion
+matrix, and model comparison results.
+
+The expected final test-set result is approximately:
+
+| Model | Accuracy | Income F1 score |
+|---|---:|---:|
+| Majority baseline | 94.6% | 0.00 |
 | Logistic Regression | 74.8% | 0.25 |
-| **Random Forest (tuned, final)** | **95.4%** | **0.59** |
+| Tuned Random Forest | 95.4% | 0.59 |
 
-See the notebook for the full confusion matrix, classification report, and error analysis.
+Small differences may occur because of package versions or changes to the dataset. The tuned
+Random Forest is the final selected model.
 
-## Team
-_(add team member names and IDs here)_
+## Team Members
+
+- MD. MOUDUD AHMED ALVE - 23-50224-1@student.aiub.edu
+- REZVINE ENJOY NAKIB - 23-50573-1@student.aiub.edu
+- ISMAIL HOSSAIN FAHIM - 23-50009-1@student.aiub.edu
+ 
